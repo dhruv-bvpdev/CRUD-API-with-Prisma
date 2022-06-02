@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+//* @id -> primary key
+//* @unique -> makes sure the values remian unique
+//* @default -> sets a default value
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String @unique
+  price Int @default(99)
+  createdAt DateTime @default(now())
+  category Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+}
+
+model Category {
+  id Int @id @default(autoincrement())
+  name String @unique
+  products Product[]
+}
